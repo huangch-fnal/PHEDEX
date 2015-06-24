@@ -22,6 +22,7 @@ Serve as a simple request search and cache-able catalog of requests to save with
                    (show requests in which this node is involved)
   decision         decision at the node, 'approved', 'disapproved' or 'pending'
   group *          user group
+  move             is it a move in transfer (yes) or just replication (no), default both
   create_since     created since this time
   create_until     created until this time
   decide_since     decided since this time
@@ -29,13 +30,14 @@ Serve as a simple request search and cache-able catalog of requests to save with
   dataset *        dataset is part of request, or a block from this dataset
   block *          block is part of request, or part of a dataset in request
   decided_by *     name of person who approved the request
+  move             is it a move? 'y' or 'n'
 
   * could be multiple and/or with wildcard
  ** when both 'block' and 'dataset' are present, they form a logical disjunction (ie. or)
 
 =head2 Output
 
- <request id= type= state= time_create= >
+ <request id= type= state= time_create= approval= request_by= group= move= >
    <node id= se= name= decision= time_decide= />
  </request>
 
@@ -46,6 +48,8 @@ Serve as a simple request search and cache-able catalog of requests to save with
   approval         approval state, one of 'approved', 'disapproved', 'mixed', 'pending'
   requested_by     the human name of the person who made the request
   time_create      creation timestamp
+  group            group name
+  move             for xfer, is it a move, 'y' or 'n', ('' for deletion)
 
 =head3 <node> attributes
 
@@ -67,6 +71,8 @@ my $map = {
     _KEY => 'ID',
     id => 'ID',
     type => 'TYPE',
+    move => 'IS_MOVE',
+    group => 'GROUP',
     requested_by => 'REQUESTED_BY',
     time_create => 'TIME_CREATE',
     node => {
@@ -101,6 +107,7 @@ sub request_list
                     requested_by => { using => 'text', multiple => 1 },
                     decided_by => { using => 'text', multiple => 1 },
                     node => { using => 'node', multiple => 1 },
+                    move => { using => 'yesno' },
                     decision => { using => 'approval_state', multiple => 1 },
                     create_since => { using => 'time' },
                     create_until => { using => 'time' },
