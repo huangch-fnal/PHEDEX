@@ -3117,16 +3117,11 @@ sub getRequestList
 {
     my ($core, %h) = @_;
 
-    my $join_group='';
-    if (exists $h{GROUP})
-    {
-        $join_group = qq {join t_req_xfer rx on rx.request = r.id
-            join t_adm_group g on g.id = rx.user_group};
-    }
     my $sql = qq {
         select
           distinct
             r.id,
+            rx.is_move,
             rt.name as type,
             i.name as requested_by,
             r.time_create,
@@ -3139,10 +3134,12 @@ sub getRequestList
                 when d.decision is NULL then 'pending'
             end as decision,
             i2.name as decided_by,
+            g.name as "group",
             d.time_decided
         from
             t_req_request r
-            $join_group
+            left join t_req_xfer rx on rx.request = r.id
+            left join t_adm_group g on g.id = rx.user_group
             join t_req_type rt on rt.id = r.type
             join t_req_node rn on r.id = rn.request
             join t_adm_node n on n.id = rn.node
@@ -3195,6 +3192,11 @@ sub getRequestList
         $p{':decide_until'} = &str2time($h{DECIDE_UNTIL});
     }
 
+    if (exists $h{MOVE})
+    {
+        $sql .= " and rx.is_move = :is_move ";
+        $p{':is_move'} = $h{MOVE};
+    }
 
     if (exists $h{APPROVAL})
     {
