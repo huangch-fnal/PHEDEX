@@ -22,7 +22,6 @@ Serve as a simple request search and cache-able catalog of requests to save with
                    (show requests in which this node is involved)
   decision         decision at the node, 'approved', 'disapproved' or 'pending'
   group *          user group
-  move             is it a move in transfer (yes) or just replication (no), default both
   create_since     created since this time
   create_until     created until this time
   decide_since     decided since this time
@@ -30,7 +29,7 @@ Serve as a simple request search and cache-able catalog of requests to save with
   dataset *        dataset is part of request, or a block from this dataset
   block *          block is part of request, or part of a dataset in request
   decided_by *     name of person who approved the request
-  move             is it a move? 'y' or 'n'
+  move             is it a move in transfer? 'y' or 'n', default both
 
   * could be multiple and/or with wildcard
  ** when both 'block' and 'dataset' are present, they form a logical disjunction (ie. or)
