@@ -983,7 +983,8 @@ sub getRequestData
     {
         build_multi_filters($self, \$filters, \%p, \%h,
             ( REQUEST => 'r.id',
-              GROUP => 'g.name' ));
+              GROUP => 'g.name',
+              MOVE => 'rx.is_move' ));
     }
     else
     {
