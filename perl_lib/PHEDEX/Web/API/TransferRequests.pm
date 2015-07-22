@@ -20,6 +20,7 @@ requesting client, the approving clients, and the request options.
   group            name of the group, may be multiple
   limit            maximal number of records returned
   create_since     created after this time
+  move             is it a move? 'y' or 'n', default both
 
   approval         approval state: approved, disapproved, pending or mixed
                    default is all, may be multiple
@@ -173,6 +174,7 @@ sub xfer_request
                     group => { using => 'text', multiple => 1 },
                     limit => { using => 'pos_int' },
                     create_since => { using => 'time' },
+                    move => { using => 'yesno' },
                     approval => { using => 'approval_state', multiple => 1 },
                     requested_by => { using => 'text', multiple => 1 }
                 }
